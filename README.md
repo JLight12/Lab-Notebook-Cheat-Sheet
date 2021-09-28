@@ -7,43 +7,36 @@
 > https://docs.vyos.io/en/crux
 
 Switch into configuration mode.
-
 ```
 config
 ```
 
 Show Current Configuration
-
 ```
 show
 ```
 
 Push the configuration to the interfaces
-
 ```
 commit
 ```
 
 Configure Interfaces
-
 ```
 set interfaces ethernet eth1 address 132.235.160.X/28
 ```
 
 Default Route - This only needs to be done **once per router.**
-
 ```
 set protocols static route 0.0.0.0/0 next-hop 132.235.160.14
 ```
 
 Static Route Update
-
 ```
 set protocols static route 100.70.111.64/26 next-hop 100.70.111.241
 ```
 
 DNS Servers
-
 ````
 set system name-server 132.235.9.75
 set system name-server 132.235.200.41
@@ -59,43 +52,52 @@ set service dhcp-server shared-network-name SUB1_POOL subnet 192.168.12.0/24 dns
 set service dhcp-server shared-network-name SUB1_POOL subnet 192.168.12.0/24 lease 120
 ````
 
-VyOS VLAN Interfaces
+Set NAT
+````
+set nat source rule 100 outbound-interface eth0
 
+set nat source rule 100 source address 172.X.Y.Z/S
+
+set nat source rule 100 translation address masquerade
+````
+
+VyOS VLAN Interfaces
 ````
 set interfaces ethernet eth0 vif 310 address 132.235.160.1/28
 set interfaces ethernet eth0 vif 100X address 192.168.11.254/24
 ````
 
 IPv6 Config Interface
-
 ```
 set interfaces ethernet eth1 address 2610:a8:4831:3XY::1/64
 ```
 
 IPv6 Static Routing
-
 ```
 set protocols static route6 ::/0 next-hop 2610:a8:4831:3XY::1
 ```
 
 Show IPv6 Route table
-
 ```
 show ipv6 route
 ```
 
 Config Name Server
-
 ```
 set system name-server 2610:a8:4831:310::1
 ```
 
-Configure IPv6 RA
+Config Host-Name
+````
+set system host-name ###
+````
 
+Configure IPv6 RA
 ````
 set interfaces ethernet eth1 ipv6 router-advert prefix 2610:a8:4831:3XY::/64
 set interfaces ethernet eth1 ipv6 router-advert name-server 2610:a8:4831:310::1
 ````
+
 Advanced Config Commands
 ```
 show system | commands
@@ -103,10 +105,26 @@ show system | commands
 
 Ubuntu-CLI
 ````
+sudo nmcli general hostname <PICK A HOSTNAME>
+sudo nmcli con mod "Wired connection 1" ipv4.addresses 100.70.KKK.Y/26
+sudo nmcli con mod "Wired connection 1" ipv4.gateway 100.70.KKK.Q
+sudo nmcli con mod "Wired connection 1" ipv4.dns 132.235.9.75
 sudo nmcli con mod "Wired connection 1" ipv4.method manual
-sudo nmcli con mod "Wired connection 1" ipv4.addresses X.X.X.X/Y
-sudo nmcli con mod "Wired connection 1" ipv4.gateway X.X.X.G
-sudo nmcli con mod "Wired connection 1" ipv4.dns D.D.D.D
+sudo nmcli connection down "Wired connection 1"
+sudo nmcli connection up "Wired connection 1"
+````
+
+SSH
+````
+ssh itsclass@X.X.X.X
+````
+
+Useful Commands
+````
+(U)Traceroute6: traceroute6 -n #####
+(U)Ping6: ping6 #####
+(W)tracert -6 -d #####
+(W)ping -6 #####
 ````
 
 ## **IPv4 Quick Subnetting Table** ## 
