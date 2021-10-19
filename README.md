@@ -28,7 +28,7 @@ set interfaces ethernet eth1 address 132.235.160.X/28
 
 Default Route - This only needs to be done **once per router.**
 ```
-set protocols static route 0.0.0.0/0 next-hop 132.235.160.14
+set protocols static route 0.0.0.0/0 next-hop 132.235.160.254
 ```
 
 Static Route Update
